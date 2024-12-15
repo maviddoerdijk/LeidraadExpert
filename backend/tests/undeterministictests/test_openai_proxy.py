@@ -1,6 +1,11 @@
 from backend.proxies.openai_proxy import generate_formatted_reference
 
 
+# 1. 
+# Input
+
+# Wanted response
+
 def run_test():
     prompt = """
     Generate a JSON object with the following fields:
