@@ -1,47 +1,13 @@
 import streamlit as st
 from pydantic import BaseModel
 from typing import List, Optional
+from backend.proxies.openai_proxy import generate_formatted_reference, check_known_fields
+from backend.helpers import KnownField, UnknownField, CheckFieldsResponse
 
 st.set_page_config(page_title="Leidraad Expert", page_icon="📚")
 st.title("Leidraad Expert")
 
-# --- Pydantic Models ---
-class KnownField(BaseModel):
-    field_type: str
-    value: str
 
-class UnknownField(BaseModel):
-    field_type: str
-
-class CheckFieldsResponse(BaseModel):
-    known_fields: List[KnownField] = []
-    unknown_fields: List[UnknownField] = []
-
-# --- Placeholder Functions ---
-def check_known_fields(user_input: str) -> CheckFieldsResponse:
-    # In a real scenario, logic would parse user_input and determine known/unknown fields
-    return CheckFieldsResponse(
-        known_fields=[
-            KnownField(field_type="Auteur", value="A. de Vries"),
-            KnownField(field_type="Titel van het artikel", value="Privacy en de AVG"),
-            KnownField(field_type="Jaar van publicatie", value="2018")
-        ],
-        unknown_fields=[
-            UnknownField(field_type="Tijdschrift"),
-            UnknownField(field_type="Pagina's")
-        ]
-    )
-
-def get_formatted_reference(known_data: dict, ref_type: str) -> str:
-    # Placeholder logic for demonstration
-    if ref_type == 'footnote':
-        return "2. De Vries 2018, p. 1236."
-    elif ref_type == 'lit_list':
-        return """
-De Vries 2018
-A. de Vries, 'Privacy en de AVG', NJB 2018, p. 1234-1240.
-        """
-    return ""
 
 # --- Helper Functions ---
 def generate_and_show_references(known_data: dict):
@@ -51,8 +17,8 @@ def generate_and_show_references(known_data: dict):
         return
 
     with st.spinner("Bezig met genereren van referenties..."):
-        footnote_ref = get_formatted_reference(known_data, ref_type='footnote')
-        lit_list_ref = get_formatted_reference(known_data, ref_type='lit_list')
+        footnote_ref = generate_formatted_reference(known_data, ref_type='footnote')
+        literature_list_ref = generate_formatted_reference(known_data, ref_type='literature_list')
 
     st.subheader("Gegenereerde Referenties")
 
@@ -61,8 +27,8 @@ def generate_and_show_references(known_data: dict):
     footnote_container.markdown(f"```\n{footnote_ref}\n```")
 
     st.markdown("**Literatuurlijst**:")
-    lit_list_container = st.container()
-    lit_list_container.markdown(f"```\n{lit_list_ref}\n```")
+    literature_list_container = st.container()
+    literature_list_container.markdown(f"```\n{literature_list_ref}\n```")
 
 
 # --- Session State Initialization ---

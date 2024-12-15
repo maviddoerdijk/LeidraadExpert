@@ -1,4 +1,4 @@
-from backend.proxies.openai_proxy import generate_formatted_reference
+from backend.proxies.openai_proxy import generate_formatted_reference, check_known_fields
 
 
 # 1. 
@@ -6,26 +6,34 @@ from backend.proxies.openai_proxy import generate_formatted_reference
 
 # Wanted response
 
-def run_test():
-    prompt = """
-    Generate a JSON object with the following fields:
-    - 'footnote': Shortened reference format for footnotes.
-    - 'bibliography': Full reference format for bibliographies.
-    - 'bibliography_list_entry': Format for an alphabetized bibliography list.
-
-    Example Output:
-    {
-    "footnote": "Botman 2015, p. 430.",
-    "bibliography": "M. Botman, *De Dienstenrichtlijn in Nederland*, Den Haag: Boom juridisch 2015.",
-    "bibliography_list_entry": "Botman 2015"
+def test_1():
+    ref_type = "literature_list"
+    known_data = {
+        "Auteur": "A. de Vries",
+        "Titel van het artikel": "Privacy en de AVG",
+        "Jaar van publicatie": "2018",
+        "Tijdschrift": "NJB",
+        "Pagina's": "1234-1240",
     }
+    output = generate_formatted_reference(known_data, ref_type)
+    print(output)
 
-    Input:
-    Source Type: Book
-    Details: {"author": "M. Botman", "title": "De Dienstenrichtlijn in Nederland", "year": 2015, "place_of_publication": "Den Haag", "publisher": "Boom juridisch"}
-
-    Output:
-    """
-
-    formatted_reference = generate_formatted_reference(prompt)
-    print(formatted_reference)
+def test_2():
+    user_input = "Privacy en de AVG"
+    output = check_known_fields(user_input)
+    print(output)
+    
+def test_3():
+    user_input = "Privacy en de AVG, Tijdschrift: Nederlands Juristenblad (NJB)  uit 2018"
+    output = check_known_fields(user_input)
+    print(output)
+    
+def test_4():
+    user_input = "Privacy en de AVG, Tijdschrift: Nederlands Juristenblad (NJB)  uit 2018 A. de Vries "
+    output = check_known_fields(user_input)
+    print(output)
+    
+def test_5():
+    user_input = "Privacy en de AVG, Tijdschrift: Nederlands Juristenblad (NJB)  uit 2018, volgensmij geschreven door Vries maar weet ik niet zeker.. "
+    output = check_known_fields(user_input)
+    print(output)

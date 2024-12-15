@@ -1,3 +1,7 @@
-from backend.tests.undeterministictests.test_openai_proxy import run_test
+from backend.tests.undeterministictests.test_openai_proxy import test_1, test_2, test_3, test_4, test_5
 
-run_test()
+# test_1()
+test_2()
+test_3()
+test_4()
+test_5()
