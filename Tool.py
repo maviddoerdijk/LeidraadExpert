@@ -6,6 +6,7 @@ from backend.helpers import KnownField, UnknownField, CheckFieldsResponse
 
 st.set_page_config(page_title="Leidraad Expert", page_icon="📚")
 st.title("Leidraad Expert")
+st.text("Current streamlit version: " + st.__version__)
 
 
 
