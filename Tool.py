@@ -55,7 +55,7 @@ if clear_button:
     # Reset the application state
     st.session_state.response = None
     st.session_state.final_known_data = {}
-    st.experimental_rerun()
+    # st.rerun()
 
 if check_button:
     if not user_input.strip():
